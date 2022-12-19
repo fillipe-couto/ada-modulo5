@@ -1,0 +1,8 @@
+
+CREATE SCHEMA IF NOT EXISTS t99t53 AUTHORIZATION sa;
+
+CREATE TABLE IF NOT EXISTS t99t53.PROFESSORES (
+    professor_id int(11) NOT NULL AUTO_INCREMENT,
+    professor_name varchar(150) NOT NULL,
+    PRIMARY KEY (professor_id)
+);
