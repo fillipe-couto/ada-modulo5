@@ -1,44 +1,35 @@
 package com.ada.modulo5.school_api.model;
 
-import com.ada.modulo5.school_api.enums.Gender;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "ALUNOS")
 public class Student {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "aluno_id")
     private int id;
-    private int registerCode;
-    private String name;
-    private Gender gender;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getRegisterCode() {
-        return registerCode;
-    }
-
-    public void setRegisterCode(int register) {
-        this.registerCode = register;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
+    @Column(name = "aluno_name", nullable = false)
+    @NotBlank(message = "Nome não pode ser em branco")
+    @Size(min = 2, message = "Mínimo de 2 caracteres para nome")
+    private String nome;
 
 }

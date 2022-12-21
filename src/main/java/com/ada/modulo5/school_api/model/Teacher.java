@@ -8,7 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "PROFESSORES")
 public class Teacher extends PanacheEntityBase {
@@ -20,21 +28,5 @@ public class Teacher extends PanacheEntityBase {
 
     @Column(name = "professor_name", nullable = false)
     private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

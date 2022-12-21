@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.ada.modulo5.school_api.dto.TeacherRequest;
 import com.ada.modulo5.school_api.model.Teacher;
 import com.ada.modulo5.school_api.service.TeacherService;
 
@@ -26,37 +27,39 @@ public class TeacherResource {
     }
 
     @GET
+    @Path("/listAll")
     public Response listTeachers() {
-        service.listTeachers();
-        return Response.ok().build();
+        return Response.ok(service.listTeachers()).build();
     }
 
     @GET
     @Path("/{id}")
-    public Response getTeacher(@PathParam("id") int teacherId) {
-        service.getTeacher(teacherId);
-        return Response.ok().build();
+    public Response getTeacher(@PathParam("id") int teacherId) throws Exception {
+        return Response.ok(service.getTeacher(teacherId)).build();
     }
 
-    @POST
-    public Response insertTeacher(Teacher teacher) {
-        return Response.status(
-                service.insertTeacher(teacher) ? Response.Status.CREATED : Response.Status.BAD_REQUEST)
-                .build();
-    }
+    // @POST
+    // public Response insertTeacher(TeacherRequest teacher) {
+    // return Response.status(
+    // service.insertTeacher(teacher) ? Response.Status.CREATED :
+    // Response.Status.BAD_REQUEST)
+    // .build();
+    // }
 
-    @PUT
-    public Response updateTeacher(Teacher teacher) {
-        return Response.status(
-                service.updateTeacher(teacher) ? Response.Status.OK : Response.Status.BAD_REQUEST)
-                .build();
-    }
+    // @PUT
+    // public Response updateTeacher(Teacher teacher) {
+    // return Response.status(
+    // service.updateTeacher(teacher) ? Response.Status.OK :
+    // Response.Status.BAD_REQUEST)
+    // .build();
+    // }
 
-    @DELETE
-    public Response deleteTeacher(Teacher teacher) {
-        return Response.status(
-                service.deleteTeacher(teacher) ? Response.Status.NOT_FOUND : Response.Status.BAD_REQUEST)
-                .build();
-    }
+    // @DELETE
+    // public Response deleteTeacher(Teacher teacher) {
+    // return Response.status(
+    // service.deleteTeacher(teacher) ? Response.Status.NOT_FOUND :
+    // Response.Status.BAD_REQUEST)
+    // .build();
+    // }
 
 }
