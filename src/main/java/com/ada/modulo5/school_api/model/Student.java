@@ -28,8 +28,8 @@ public class Student {
     private int id;
 
     @Column(name = "aluno_name", nullable = false)
-    @NotBlank(message = "Nome não pode ser em branco")
-    @Size(min = 2, message = "Mínimo de 2 caracteres para nome")
+    @NotBlank(message = "Nome de Aluno não pode ser em branco")
+    @Size(min = 2, message = "É necessário um mínimo de 2 caracteres para nome de Aluno")
     private String nome;
 
 }

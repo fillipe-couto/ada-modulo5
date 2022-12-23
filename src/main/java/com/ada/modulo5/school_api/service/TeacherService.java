@@ -5,7 +5,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.ada.modulo5.school_api.dto.TeacherResponse;
+import com.ada.modulo5.school_api.dto.TeacherDtoResponse;
 import com.ada.modulo5.school_api.mapper.TeacherMapper;
 import com.ada.modulo5.school_api.model.Teacher;
 
@@ -22,7 +22,7 @@ public class TeacherService {
         return Teacher.listAll();
     }
 
-    public TeacherResponse getTeacher(int teacherId) throws Exception {
+    public TeacherDtoResponse getTeacher(int teacherId) throws Exception {
         if (teacherId <= 0) {
             throw new Exception("ID deve ser maior que 0");
         }

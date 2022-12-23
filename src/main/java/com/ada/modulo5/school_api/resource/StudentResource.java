@@ -1,5 +1,6 @@
 package com.ada.modulo5.school_api.resource;
 
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,22 +11,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.ada.modulo5.school_api.dto.ErrorResponse;
 import com.ada.modulo5.school_api.dto.StudentDtoRequest;
 import com.ada.modulo5.school_api.service.StudentService;
+
+import lombok.RequiredArgsConstructor;
 
 @Path("/student")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RequiredArgsConstructor
 public class StudentResource {
 
     private final StudentService service;
 
-    public StudentResource(StudentService service) {
-        this.service = service;
-    }
-
     @GET
-    @Path("/listAll")
+    @Path("/list")
     public Response listStudents() {
         return Response.ok(service.listStudents()).build();
     }
@@ -38,7 +39,21 @@ public class StudentResource {
 
     @POST
     public Response insertStudent(StudentDtoRequest request) {
-        return Response.ok(service.insertStudent(request)).build();
+        try {
+
+            final var response = service.insertStudent(request);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+
+        } catch (ConstraintViolationException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ErrorResponse.createFromValidation(e))
+                    .build();
+        }
     }
 
     @PUT

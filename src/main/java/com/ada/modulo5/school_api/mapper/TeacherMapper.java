@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.ada.modulo5.school_api.dto.TeacherResponse;
+import com.ada.modulo5.school_api.dto.TeacherDtoResponse;
 import com.ada.modulo5.school_api.model.Teacher;
 
 @ApplicationScoped
 public class TeacherMapper {
 
-    public TeacherResponse getTeacherResponse(Teacher teacher) throws Exception {
-        return TeacherResponse.builder().id(teacher.getId()).name(teacher.getName()).build();
+    public TeacherDtoResponse getTeacherResponse(Teacher teacher) throws Exception {
+        return TeacherDtoResponse.builder().id(teacher.getId()).name(teacher.getName()).build();
     }
 
 }

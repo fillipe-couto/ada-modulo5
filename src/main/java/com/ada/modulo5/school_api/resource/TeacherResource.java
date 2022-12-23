@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.ada.modulo5.school_api.dto.TeacherRequest;
+import com.ada.modulo5.school_api.dto.TeacherDtoRequest;
 import com.ada.modulo5.school_api.model.Teacher;
 import com.ada.modulo5.school_api.service.TeacherService;
 

@@ -1,7 +1,7 @@
 package com.ada.modulo5.school_api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +9,15 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties
-public class TeacherRequest {
-    private String name;
+public class ErrorMessage {
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String field;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String message;
+
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties
-public class TeacherResponse {
+public class TeacherDtoResponse {
     private int id;
     private String name;
 }
