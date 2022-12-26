@@ -32,7 +32,7 @@ public class StudentService {
 
     @Transactional
     public StudentDtoResponse insertStudent(StudentDtoRequest request) {
-        Student student = mapper.toEntity(request);
+        Student student = mapper.toNewEntity(request);
         repository.persistAndFlush(student);
         return mapper.toResponse(student);
     }

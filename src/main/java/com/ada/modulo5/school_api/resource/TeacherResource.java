@@ -38,6 +38,12 @@ public class TeacherResource {
         return Response.ok(service.getTeacher(teacherId)).build();
     }
 
+    @GET
+    @Path("/{id}/students")
+    public Response getStudentsByTeacher(@PathParam("id") int teacherId) throws Exception {
+        return Response.ok(service.getStudentsByTeacher(teacherId)).build();
+    }
+
     // @POST
     // public Response insertTeacher(TeacherRequest teacher) {
     // return Response.status(

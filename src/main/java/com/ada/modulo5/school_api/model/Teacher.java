@@ -1,10 +1,14 @@
 package com.ada.modulo5.school_api.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -34,5 +38,8 @@ public class Teacher extends PanacheEntityBase {
     @NotBlank(message = "Nome de Professor não pode ser em branco")
     @Size(min = 2, message = "É necessário um mínimo de 2 caracteres para nome de Professor")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tutor")
+    private List<Student> alunos;
 
 }

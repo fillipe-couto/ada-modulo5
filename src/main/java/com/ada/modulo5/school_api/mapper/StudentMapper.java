@@ -16,6 +16,7 @@ public class StudentMapper {
         return StudentDtoResponse.builder()
                 .id(student.getId())
                 .nome(student.getNome())
+                .tutor(student.getTutor().getName())
                 .build();
     }
 
@@ -25,7 +26,7 @@ public class StudentMapper {
         return studentsResponse;
     }
 
-    public Student toEntity(StudentDtoRequest request) {
+    public Student toNewEntity(StudentDtoRequest request) {
         return Student.builder().nome(request.getNome()).build();
     }
 
