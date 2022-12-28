@@ -3,6 +3,7 @@ package com.ada.modulo5.school_api.resource;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -60,6 +61,14 @@ public class StudentResource {
     @Path("/{id}")
     public Response updateStudent(@PathParam("id") int studentId, StudentDtoRequest request) {
         return Response.ok(service.updateStudent(studentId, request)).build();
+    }
+
+    @PATCH
+    @Path("/{studentId}/tutor/{tutorId}")
+    public Response patchStudentsTutor(
+            @PathParam("studentId") int studentId,
+            @PathParam("tutorId") int tutorId) {
+        return Response.ok(service.patchStudentsTutor(studentId, tutorId)).build();
     }
 
     // @DELETE

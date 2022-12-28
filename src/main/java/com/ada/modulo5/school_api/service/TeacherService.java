@@ -11,10 +11,7 @@ import com.ada.modulo5.school_api.mapper.StudentMapper;
 import com.ada.modulo5.school_api.mapper.TeacherMapper;
 import com.ada.modulo5.school_api.model.Teacher;
 
-import lombok.extern.slf4j.Slf4j;
-
 @ApplicationScoped
-@Slf4j
 public class TeacherService {
 
     @Inject

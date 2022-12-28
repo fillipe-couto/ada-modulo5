@@ -10,6 +10,7 @@ import com.ada.modulo5.school_api.dto.StudentDtoRequest;
 import com.ada.modulo5.school_api.dto.StudentDtoResponse;
 import com.ada.modulo5.school_api.mapper.StudentMapper;
 import com.ada.modulo5.school_api.model.Student;
+import com.ada.modulo5.school_api.model.Teacher;
 import com.ada.modulo5.school_api.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,21 @@ public class StudentService {
             throw new NotFoundException(String.format("Estudante de ID %d não encontrado", studentId));
         }
         repository.persistAndFlush(mapper.updateEntity(request, student));
+        return mapper.toResponse(student);
+    }
+
+    @Transactional
+    public StudentDtoResponse patchStudentsTutor(int studentId, int tutorId) {
+        Student student = repository.findById(studentId);
+        if (student == null) {
+            throw new NotFoundException(String.format("Estudante de ID %d não encontrado", studentId));
+        }
+        Teacher tutor = Teacher.findById(tutorId);
+        if (tutor == null) {
+            throw new NotFoundException(String.format("Tutor de ID %d não encontrado", tutorId));
+        }
+        student.setTutor(tutor);
+        repository.persistAndFlush(student);
         return mapper.toResponse(student);
     }
 

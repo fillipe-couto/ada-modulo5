@@ -1,18 +1,13 @@
 package com.ada.modulo5.school_api.resource;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.ada.modulo5.school_api.dto.TeacherDtoRequest;
-import com.ada.modulo5.school_api.model.Teacher;
 import com.ada.modulo5.school_api.service.TeacherService;
 
 @Path("/teacher")
