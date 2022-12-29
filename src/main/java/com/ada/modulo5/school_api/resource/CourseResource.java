@@ -1,5 +1,7 @@
 package com.ada.modulo5.school_api.resource;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,51 +13,76 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.ada.modulo5.school_api.model.Course;
+import com.ada.modulo5.school_api.dto.CourseDtoRequest;
+import com.ada.modulo5.school_api.dto.ErrorResponse;
 import com.ada.modulo5.school_api.service.CourseService;
+
+import lombok.RequiredArgsConstructor;
 
 @Path("/course")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RequiredArgsConstructor
 public class CourseResource {
 
     private final CourseService service;
 
-    public CourseResource(CourseService service) {
-        this.service = service;
-    }
-
     @GET
+    @Path("/list")
     public Response listCourses() {
-        service.listCourses();
-        return Response.ok().build();
+        return Response.ok(service.listCourses()).build();
     }
 
     @GET
     @Path("/{id}")
     public Response getCourse(@PathParam("id") int courseId) {
-        service.getCourse(courseId);
-        return Response.ok().build();
+        try {
+
+            final var response = service.getCourse(courseId);
+
+            return Response
+                    .status(Response.Status.FOUND)
+                    .entity(response)
+                    .build();
+
+        } catch (EntityNotFoundException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(ErrorResponse.createFromEntity(e))
+                    .build();
+        }
     }
 
     @POST
-    public Response insertCourse(Course course) {
-        return Response.status(
-                service.insertCourse(course) ? Response.Status.CREATED : Response.Status.BAD_REQUEST)
-                .build();
+    public Response insertCourse(CourseDtoRequest request) {
+        try {
+
+            final var response = service.insertCourse(request);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+
+        } catch (ConstraintViolationException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ErrorResponse.createFromValidation(e))
+                    .build();
+        }
     }
 
     @PUT
-    public Response updateCourse(Course course) {
-        return Response.status(
-                service.updateCourse(course) ? Response.Status.OK : Response.Status.BAD_REQUEST)
-                .build();
+    @Path("/{id}")
+    public Response updateCourse(@PathParam("id") int courseId, CourseDtoRequest request) {
+        return Response.ok(service.updateCourse(courseId, request)).build();
     }
 
     @DELETE
-    public Response deleteCourse(Course course) {
-        return Response.status(
-                service.deleteCourse(course) ? Response.Status.NOT_FOUND : Response.Status.BAD_REQUEST)
+    @Path("/{id}")
+    public Response deleteCourse(@PathParam("id") int courseId) {
+        return Response
+                .status(service.deleteCourse(courseId) ? Response.Status.NO_CONTENT : Response.Status.NOT_FOUND)
                 .build();
     }
 

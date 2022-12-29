@@ -3,55 +3,56 @@ package com.ada.modulo5.school_api.service;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 
-import com.ada.modulo5.school_api.dto.StudentDtoResponse;
+import com.ada.modulo5.school_api.dto.TeacherDtoRequest;
 import com.ada.modulo5.school_api.dto.TeacherDtoResponse;
-import com.ada.modulo5.school_api.mapper.StudentMapper;
 import com.ada.modulo5.school_api.mapper.TeacherMapper;
 import com.ada.modulo5.school_api.model.Teacher;
 
+import lombok.RequiredArgsConstructor;
+
 @ApplicationScoped
+@RequiredArgsConstructor
 public class TeacherService {
 
-    @Inject
-    TeacherMapper mapper;
+    private final TeacherMapper mapper;
 
-    @Inject
-    StudentMapper studentMapper;
-
-    public List<Teacher> listTeachers() {
-        return Teacher.listAll();
+    public List<TeacherDtoResponse> listTeachers() {
+        return mapper.toListResponse(Teacher.listAll());
     }
 
-    public TeacherDtoResponse getTeacher(int teacherId) throws Exception {
-        if (teacherId <= 0) {
-            throw new Exception("ID deve ser maior que 0");
+    public TeacherDtoResponse getTeacher(int teacherId) {
+        Teacher teacher = Teacher.findById(teacherId);
+        if (teacher == null) {
+            throw new EntityNotFoundException(String.format("Professor de ID %d não encontrado", teacherId));
         }
-        Teacher response = Teacher.findById(teacherId);
-        return mapper.getTeacherResponse(response);
+        return mapper.toResponse(Teacher.findById(teacherId));
     }
 
-    public List<StudentDtoResponse> getStudentsByTeacher(int teacherId) throws Exception {
-        if (teacherId <= 0) {
-            throw new Exception("ID deve ser maior que 0");
+    @Transactional
+    public TeacherDtoResponse insertTeacher(TeacherDtoRequest request) {
+        Teacher teacher = mapper.toNewEntity(request);
+        teacher.persistAndFlush();
+        return mapper.toResponse(teacher);
+    }
+
+    @Transactional
+    public TeacherDtoResponse updateTeacher(int teacherId, TeacherDtoRequest request) {
+        Teacher teacher = Teacher.findById(teacherId);
+        if (teacher == null) {
+            throw new NotFoundException(String.format("Estudante de ID %d não encontrado", teacherId));
         }
-        Teacher response = Teacher.findById(teacherId);
-        return studentMapper.toListResponse(response.getAlunos());
+        teacher.setName(request.getName());
+        teacher.persistAndFlush();
+        return mapper.toResponse(teacher);
     }
 
-    // public TeacherResponse insertTeacher(Teacher teacher) {
-    // T
-    // }
-
-    // public boolean updateTeacher(Teacher teacher) {
-    // log.info("Teacher ID {} updated", teacher.getId());
-    // return true;
-    // }
-
-    // public boolean deleteTeacher(Teacher teacher) {
-    // log.info("Teacher ID {} deleted", teacher.getId());
-    // return true;
-    // }
+    @Transactional
+    public Boolean deleteTeacher(int teacherId) {
+        return Teacher.deleteById(teacherId);
+    }
 
 }

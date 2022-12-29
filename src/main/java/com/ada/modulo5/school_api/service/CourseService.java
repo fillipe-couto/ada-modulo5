@@ -1,41 +1,60 @@
 package com.ada.modulo5.school_api.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 
+import com.ada.modulo5.school_api.dto.CourseDtoRequest;
+import com.ada.modulo5.school_api.dto.CourseDtoResponse;
+import com.ada.modulo5.school_api.mapper.CourseMapper;
 import com.ada.modulo5.school_api.model.Course;
+import com.ada.modulo5.school_api.repository.CourseRepository;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@Slf4j
+@RequiredArgsConstructor
 public class CourseService {
 
-    public List<Course> listCourses() {
-        log.info("All Courses retrieved");
-        return Arrays.asList(new Course(), new Course());
+    private final CourseRepository repository;
+
+    private final CourseMapper mapper;
+
+    public List<CourseDtoResponse> listCourses() {
+        return mapper.toListResponse(repository.listAll());
     }
 
-    public Course getCourse(int courseId) {
-        log.info("Course ID {} retrieved", courseId);
-        return new Course();
+    public CourseDtoResponse getCourse(int courseId) {
+        Course course = repository.findById(courseId);
+        if (course == null) {
+            throw new EntityNotFoundException(String.format("Curso de ID %d não encontrado", courseId));
+        }
+        return mapper.toResponse(repository.findById(courseId));
     }
 
-    public boolean insertCourse(Course course) {
-        log.info("Course ID {} inserted", course.getId());
-        return true;
+    @Transactional
+    public CourseDtoResponse insertCourse(CourseDtoRequest request) {
+        Course course = mapper.toNewEntity(request);
+        repository.persistAndFlush(course);
+        return mapper.toResponse(course);
     }
 
-    public boolean updateCourse(Course course) {
-        log.info("Course ID {} updated", course.getId());
-        return true;
+    @Transactional
+    public CourseDtoResponse updateCourse(int courseId, CourseDtoRequest request) {
+        Course course = repository.findById(courseId);
+        if (course == null) {
+            throw new NotFoundException(String.format("Curso de ID %d não encontrado", courseId));
+        }
+        repository.persistAndFlush(mapper.updateEntity(request, course));
+        return mapper.toResponse(course);
     }
 
-    public boolean deleteCourse(Course course) {
-        log.info("Course ID {} deleted", course.getId());
-        return true;
+    @Transactional
+    public Boolean deleteCourse(int courseId) {
+        return repository.deleteById(courseId);
     }
 
 }

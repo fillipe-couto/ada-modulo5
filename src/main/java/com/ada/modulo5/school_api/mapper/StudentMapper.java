@@ -16,7 +16,7 @@ public class StudentMapper {
         return StudentDtoResponse.builder()
                 .id(student.getId())
                 .nome(student.getNome())
-                .tutor(student.getTutor().getName())
+                .tutor(student.getTutor() == null ? null : student.getTutor().getName())
                 .build();
     }
 
@@ -32,6 +32,7 @@ public class StudentMapper {
 
     public Student updateEntity(StudentDtoRequest request, Student entity) {
         entity.setNome(request.getNome());
+        entity.setTutor(entity.getTutor());
         return entity;
     }
 

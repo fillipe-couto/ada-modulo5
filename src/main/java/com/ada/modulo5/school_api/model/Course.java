@@ -2,13 +2,18 @@ package com.ada.modulo5.school_api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "CURSOS")
 public class Course {
@@ -39,8 +45,11 @@ public class Course {
     private String descricao;
 
     @Column(name = "curso_duration", nullable = false)
-    @NotBlank(message = "Duração de Curso não pode ser em branco")
     @Min(value = 12, message = "Duração de Curso deve ser no mínimo 12 horas")
     private int duracao;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "titular", unique = true)
+    private Teacher titular;
 
 }

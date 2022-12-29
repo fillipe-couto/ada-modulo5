@@ -3,6 +3,7 @@ package com.ada.modulo5.school_api.service;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
@@ -28,6 +29,10 @@ public class StudentService {
     }
 
     public StudentDtoResponse getStudent(int studentId) {
+        Student student = repository.findById(studentId);
+        if (student == null) {
+            throw new EntityNotFoundException(String.format("Aluno de ID %d não encontrado", studentId));
+        }
         return mapper.toResponse(repository.findById(studentId));
     }
 
@@ -63,9 +68,9 @@ public class StudentService {
         return mapper.toResponse(student);
     }
 
-    // public boolean deleteStudent(Student student) {
-    // log.info("Student ID {} deleted", student.getId());
-    // return true;
-    // }
+    @Transactional
+    public Boolean deleteStudent(int studentId) {
+        return repository.deleteById(studentId);
+    }
 
 }

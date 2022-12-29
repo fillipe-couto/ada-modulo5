@@ -1,5 +1,7 @@
 package com.ada.modulo5.school_api.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -23,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "ALUNOS")
 public class Student {
@@ -37,9 +41,16 @@ public class Student {
     @Size(min = 2, message = "É necessário um mínimo de 2 caracteres para nome de Aluno")
     private String nome;
 
+    @Column(name = "data_atualizacao", nullable = false)
+    private LocalDateTime dateTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tutor")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Teacher tutor;
+
+    @PrePersist
+    public void prePersist() {
+        setDateTime(LocalDateTime.now());
+    }
 
 }

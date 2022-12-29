@@ -1,7 +1,9 @@
 package com.ada.modulo5.school_api.resource;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
@@ -35,7 +37,21 @@ public class StudentResource {
     @GET
     @Path("/{id}")
     public Response getStudent(@PathParam("id") int studentId) {
-        return Response.ok(service.getStudent(studentId)).build();
+        try {
+
+            final var response = service.getStudent(studentId);
+
+            return Response
+                    .status(Response.Status.FOUND)
+                    .entity(response)
+                    .build();
+
+        } catch (EntityNotFoundException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(ErrorResponse.createFromEntity(e))
+                    .build();
+        }
     }
 
     @POST
@@ -71,12 +87,12 @@ public class StudentResource {
         return Response.ok(service.patchStudentsTutor(studentId, tutorId)).build();
     }
 
-    // @DELETE
-    // public Response deleteStudent(Student student) {
-    // return Response.status(
-    // service.deleteStudent(student) ? Response.Status.NOT_FOUND :
-    // Response.Status.BAD_REQUEST)
-    // .build();
-    // }
+    @DELETE
+    @Path("/{id}")
+    public Response deleteStudent(@PathParam("id") int studentId) {
+        return Response
+                .status(service.deleteStudent(studentId) ? Response.Status.NO_CONTENT : Response.Status.NOT_FOUND)
+                .build();
+    }
 
 }

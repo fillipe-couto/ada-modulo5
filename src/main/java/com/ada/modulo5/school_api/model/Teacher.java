@@ -1,5 +1,6 @@
 package com.ada.modulo5.school_api.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,9 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.AllArgsConstructor;
@@ -25,6 +29,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "PROFESSORES")
 public class Teacher extends PanacheEntityBase {
@@ -39,7 +44,15 @@ public class Teacher extends PanacheEntityBase {
     @Size(min = 2, message = "É necessário um mínimo de 2 caracteres para nome de Professor")
     private String name;
 
+    @Column(name = "data_atualizacao", nullable = false)
+    private LocalDateTime dateTime;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tutor")
     private List<Student> alunos;
+
+    @PrePersist
+    public void prePersist() {
+        setDateTime(LocalDateTime.now());
+    }
 
 }
