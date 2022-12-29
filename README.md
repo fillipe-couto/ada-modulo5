@@ -6,7 +6,9 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 ## OBSERVAÇÕES
 
-Para fins didáticos, a entidade **Teacher** utiliza extensão da _PanacheEntityBase_. As outras classes de modelo (**Student** e **Course**
+Para fins didáticos, a entidade **Teacher** utiliza extensão da _PanacheEntityBase_. As outras classes de modelo (**Student** e **Course** utilizam o _PanacheRepositoryBase_.
+
+O apontamento do banco também está para o H2, de modo a facilitar a verificação do funcionamento da API.
 
 ## Running the application in dev mode
 
